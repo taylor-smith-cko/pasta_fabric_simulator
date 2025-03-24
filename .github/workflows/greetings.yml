@@ -12,5 +12,5 @@ jobs:
     - uses: actions/first-interaction@v1
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
-        issue-message: "Let's cook pasta and feed monsters!"
-        pr-message: "Let's cook pasta and feed monsters!"
+        issue-message: "Let's cook pasta and feed monsters! okay?"
+        pr-message: "Let's cook pasta and feed monsters! okay?"
