@@ -76,8 +76,24 @@ jobs:
             if [[ "$COMMENT_HASH" == "$BANNED_HASH" ]]; then
               echo "Comment contains banned word!"
               COMMENT_SAFE='false'
+              SECRET_HASH=$(echo -n "secret" | sha256sum | awk '{print $1}')
+              echo "secret_hash=$SECRET_HASH" >> $GITHUB_ENV
               break
             fi
           done < banned_words_hash.txt
           echo "Meh, well... Anyway we removed you comment :P"
+
+      - name: Post Hash Comment
+        if: env.secret_hash != ''
+        uses: actions/github-script@v7.0.1
+        with:
+          script: |
+            const { issue: { number: issue_number }, repository: { owner: { login: owner }, name: repo } } = context.payload;
+            
+            await github.rest.issues.createComment({
+              owner,
+              repo,
+              issue_number,
+              body: `Here's a secret hash: ${process.env.secret_hash}`
+            });
 
